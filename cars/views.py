@@ -1,4 +1,9 @@
-from django.shortcuts import render
-from rest_framework import serializers
-from .models import CarSpecification
+from rest_framework import generics
 
+from .models import Car
+from .serializers import CarSerializer
+
+
+class CarAPIView(generics.ListAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer

@@ -13,4 +13,4 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Car
-        fields = ('id', 'model', 'specification', 'created_at')
+        fields = ('id', 'model', 'specification', 'time_created')
