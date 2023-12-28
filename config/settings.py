@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'customer',
     'vendor',
     'orders',
-    'cars',
+    'car',
     'loyalties',
 
     # third-parties

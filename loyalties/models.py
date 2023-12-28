@@ -1,6 +1,6 @@
 from django.db import models
 from core.abstract_models import ModelProperties
-from cars.models import Car
+from car.models import Car
 
 
 class Loyalties(ModelProperties):
