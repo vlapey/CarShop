@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Dealer, DealerCar
+from .models import Dealer
 
 
 class DealerSerializer(serializers.ModelSerializer):
