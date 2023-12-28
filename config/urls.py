@@ -20,5 +20,6 @@ from car.views import CarViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/carlist/', CarViewSet.as_view())
+    path('api/v1/carlist/', CarViewSet.as_view({'get': 'list'})),
+    path('api/v1/carlist/<int:pk>', CarViewSet({'put': 'update'})),
 ]

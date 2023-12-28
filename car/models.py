@@ -13,9 +13,9 @@ class CarSpecification(ModelProperties):
 
 
 class Car(ModelProperties):
-    model = models.CharField(max_length=60)
+    brand = models.CharField(max_length=60)
     specification = models.ForeignKey(CarSpecification, on_delete=models.CASCADE,
                                       related_name='specification_car')
 
     def __str__(self):
-        return self.model
+        return self.brand
