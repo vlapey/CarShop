@@ -25,6 +25,6 @@ class VendorsLoyalties(ModelProperties):
     name = models.CharField(max_length=30)
     description = models.TextField(default='')
     discount = models.IntegerField(default=0)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='car_promotion')
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='car_loyalties')
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE,
                                related_name='vendor_loyalties')

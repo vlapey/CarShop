@@ -4,7 +4,9 @@ from .models import Car
 from .serializers import CarSerializer
 
 
-class CarViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+class CarViewSet(mixins.ListModelMixin,
+                 mixins.RetrieveModelMixin,
+                 mixins.CreateModelMixin,
                  generics.GenericAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer

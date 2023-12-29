@@ -4,7 +4,9 @@ from .models import Dealer
 from .serializers import DealerSerializer
 
 
-class DealerViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+class DealerViewSet(mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.CreateModelMixin,
                     generics.GenericAPIView):
     queryset = Dealer.objects.all()
     serializer_class = DealerSerializer

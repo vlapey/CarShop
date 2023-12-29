@@ -4,7 +4,9 @@ from .models import Vendor
 from .serializers import VendorSerializer
 
 
-class VendorViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
+class VendorViewSet(mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.CreateModelMixin,
                     generics.GenericAPIView):
     queryset = Vendor.objects.all()
     serializer_class = VendorSerializer
