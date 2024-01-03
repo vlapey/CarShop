@@ -40,11 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # local apps
-    'customer',
-    'vendor',
-    'orders',
-    'cars',
-    'loyalties',
+    'src.cars',
+    'src.customer',
+    'src.vendor',
+    'src.orders',
+    'src.loyalties',
 
     # third-parties
     'rest_framework',
