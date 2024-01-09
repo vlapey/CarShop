@@ -25,3 +25,12 @@ class Color(Enum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name) for key in cls]
+
+
+class IsHavingLicense(Enum):
+    y = "yes"
+    n = "no"
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name) for key in cls]
