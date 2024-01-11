@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'src.orders',
     'src.loyalties',
 
-    # third-parties
+    # explicit apps
     'rest_framework',
 ]
 
