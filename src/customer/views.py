@@ -10,3 +10,4 @@ class CustomerViewSet(mixins.ListModelMixin,
                       generics.GenericAPIView):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    
