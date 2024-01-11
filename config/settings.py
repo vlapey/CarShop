@@ -46,12 +46,15 @@ INSTALLED_APPS = [
     # local apps
     'src.cars',
     'src.customer',
+    'src.dealer',
     'src.vendor',
     'src.orders',
     'src.loyalties',
+    'src.history',
 
     # explicit apps
     'rest_framework',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -69,7 +72,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

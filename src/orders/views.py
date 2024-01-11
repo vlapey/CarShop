@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from .models import CustomerOrder, DealerOrder
 from .serializers import CustomerOrderSerializer, DealerOrderSerializer
@@ -7,7 +7,7 @@ from .serializers import CustomerOrderSerializer, DealerOrderSerializer
 class CustomerOrderViewSet(mixins.ListModelMixin,
                            mixins.RetrieveModelMixin,
                            mixins.CreateModelMixin,
-                           generics.GenericAPIView):
+                           GenericViewSet):
     queryset = CustomerOrder.objects.all()
     serializer_class = CustomerOrderSerializer
 
@@ -15,6 +15,6 @@ class CustomerOrderViewSet(mixins.ListModelMixin,
 class DealerOrderViewSet(mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.CreateModelMixin,
-                         generics.GenericAPIView):
+                         GenericViewSet):
     queryset = DealerOrder.objects.all()
     serializer_class = DealerOrderSerializer

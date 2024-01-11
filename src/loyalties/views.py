@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from .models import DealersLoyalties, VendorsLoyalties
 from .serializers import DealersLoyaltiesSerializer, VendorsLoyaltiesSerializer
@@ -7,7 +7,7 @@ from .serializers import DealersLoyaltiesSerializer, VendorsLoyaltiesSerializer
 class DealersLoyaltiesViewSet(mixins.ListModelMixin,
                               mixins.RetrieveModelMixin,
                               mixins.CreateModelMixin,
-                              generics.GenericAPIView):
+                              GenericViewSet):
     queryset = DealersLoyalties.objects.all()
     serializer_class = DealersLoyaltiesSerializer
 
@@ -15,6 +15,6 @@ class DealersLoyaltiesViewSet(mixins.ListModelMixin,
 class VendorLoyaltiesViewSet(mixins.ListModelMixin,
                              mixins.RetrieveModelMixin,
                              mixins.CreateModelMixin,
-                             generics.GenericAPIView):
+                             GenericViewSet):
     queryset = VendorsLoyalties.objects.all()
     serializer_class = VendorsLoyaltiesSerializer

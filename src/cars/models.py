@@ -12,7 +12,7 @@ class CarSpecification(ModelProperties):
         return self.name
 
 
-class Car(ModelProperties):
+class Cars(ModelProperties):
     brand = models.CharField(max_length=60)
     specification = models.ForeignKey(CarSpecification, on_delete=models.CASCADE,
                                       related_name='specification_car')

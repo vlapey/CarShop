@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import DealerOrder, CustomerOrder
 
-# Register your models here.
+admin.site.register(DealerOrder)
+admin.site.register(CustomerOrder)
