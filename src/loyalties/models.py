@@ -1,12 +1,12 @@
 from django.db import models
 from core.abstract_models import ModelProperties
-from car.models import Car
-from dealer.models import Dealer
-from vendor.models import Vendor
+from src.car.models import Car
+from src.dealer.models import Dealer
+from src.vendor.models import Vendor
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-class DealersLoyalties(ModelProperties):
 
+class DealersLoyalties(ModelProperties):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     name = models.CharField(max_length=30)
@@ -29,3 +29,6 @@ class VendorsLoyalties(ModelProperties):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='car_loyalties')
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE,
                                related_name='vendor_loyalties')
+
+    def __str__(self):
+        return f'{self.name} {self.car.model} {self.discount}%'

@@ -1,8 +1,8 @@
 from django.db import models
 from core.abstract_models import ModelProperties
-from dealer.models import Dealer
-from customer.models import Customer
-from vendor.models import Vendor
+from src.dealer.models import Dealer
+from src.customer.models import Customer
+from src.vendor.models import Vendor
 
 
 class CustomerDealerHistory(ModelProperties):
