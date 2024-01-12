@@ -13,4 +13,11 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cars
-        fields = ('id', 'brand', 'specification', 'date_created')
+        fields = ('id', 'brand', 'specification', 'car_type', 'color')
+
+    def create(self, validated_data):
+        specification_data = validated_data.pop('specification')
+        specification = CarSpecification.objects.get_or_create(**specification_data)
+        cars = Cars.objects.create(specification=specification[0], **validated_data)
+
+        return cars

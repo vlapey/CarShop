@@ -14,8 +14,8 @@ class CarViewSet(mixins.ListModelMixin,
 
 
 class CarSpecificationViewSet(mixins.ListModelMixin,
-                 mixins.RetrieveModelMixin,
-                 mixins.CreateModelMixin,
-                 GenericViewSet):
+                              mixins.RetrieveModelMixin,
+                              mixins.CreateModelMixin,
+                              GenericViewSet):
     queryset = CarSpecification.objects.all()
     serializer_class = CarSpecificationSerializer
