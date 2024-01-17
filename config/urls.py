@@ -17,7 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import permissions
 
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from src.cars.views import CarViewSet
 from src.customer.views import CustomerViewSet
@@ -35,6 +38,14 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
+)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Vlad",
+        default_version='v1',),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
 
 router = routers.DefaultRouter()
@@ -58,7 +69,9 @@ api_auth = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-    path('api/auth/', include(api_auth))
+    path('api/auth/', include(api_auth)),
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 

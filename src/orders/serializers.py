@@ -5,10 +5,10 @@ from .models import CustomerOrder, DealerOrder
 class CustomerOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerOrder
-        fields = '__all__'
+        exclude = ('is_active', )
 
 
 class DealerOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = DealerOrder
-        fields = '__all__'
+        exclude = ('is_active', )

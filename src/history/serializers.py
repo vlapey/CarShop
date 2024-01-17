@@ -5,10 +5,10 @@ from .models import CustomerDealerHistory, DealerVendorHistory
 class CustomerDealerHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerDealerHistory
-        fields = '__all__'
+        exclude = ('is_active', )
 
 
 class DealerVendorHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = DealerVendorHistory
-        fields = '__all__'
+        exclude = ('is_active', )

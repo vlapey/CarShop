@@ -5,10 +5,10 @@ from .models import DealersLoyalties, VendorsLoyalties
 class DealersLoyaltiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DealersLoyalties
-        fields = '__all__'
+        exclude = ('is_active', )
 
 
 class VendorsLoyaltiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = VendorsLoyalties
-        fields = '__all__'
+        exclude = ('is_active', )
