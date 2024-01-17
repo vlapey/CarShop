@@ -17,17 +17,25 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+
+
 from src.cars.views import CarViewSet
 from src.customer.views import CustomerViewSet
 from src.dealer.views import DealerViewSet
-from src.history.views import CustomerDealerHistoryViewSet
-from src.history.views import DealerVendorHistoryViewSet
-from src.loyalties.views import DealersLoyaltiesViewSet
-from src.loyalties.views import VendorLoyaltiesViewSet
-from src.orders.views import CustomerOrderViewSet
-from src.orders.views import DealerOrderViewSet
 from src.vendor.views import VendorViewSet
+
+from src.history.views import CustomerDealerHistoryViewSet, DealerVendorHistoryViewSet
+
+from src.loyalties.views import DealersLoyaltiesViewSet, VendorLoyaltiesViewSet
+
+from src.orders.views import CustomerOrderViewSet, DealerOrderViewSet
+
 from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 router = routers.DefaultRouter()
 router.register(r'cars', CarViewSet)
@@ -41,7 +49,16 @@ router.register(r'orders', CustomerOrderViewSet)
 router.register(r'orders', DealerOrderViewSet)
 router.register(r'vendor', VendorViewSet)
 
+api_auth = [
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
+    path('api/auth/', include(api_auth))
 ]
+
+

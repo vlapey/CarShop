@@ -9,9 +9,6 @@ class CarSpecification(ModelProperties):
     horsepower = models.PositiveIntegerField(default=0)
     torque = models.PositiveIntegerField(default=0)
 
-    # def __str__(self):
-    #     return f'{self.name}, {self.engine}, {self.horsepower}, {self.torque}'
-
 
 class Cars(ModelProperties):
     brand = models.CharField(max_length=60)
