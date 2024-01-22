@@ -5,7 +5,7 @@ from .models import CarSpecification, Cars
 class CarSpecificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarSpecification
-        fields = ('id', 'name', 'engine', 'horsepower', 'torque')
+        exclude = ('is_active', )
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -13,4 +13,4 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cars
-        fields = ('id', 'specification', 'color', 'mileage')
+        exclude = ('is_active', )
