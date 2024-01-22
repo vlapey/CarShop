@@ -1,7 +1,9 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from .models import DealersLoyalties, VendorsLoyalties
 from .serializers import DealersLoyaltiesSerializer, VendorsLoyaltiesSerializer
+from .filters import LoyaltiesFilter
 
 
 class DealersLoyaltiesViewSet(mixins.ListModelMixin,
@@ -10,6 +12,8 @@ class DealersLoyaltiesViewSet(mixins.ListModelMixin,
                               GenericViewSet):
     queryset = DealersLoyalties.objects.all()
     serializer_class = DealersLoyaltiesSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = LoyaltiesFilter
 
 
 class VendorLoyaltiesViewSet(mixins.ListModelMixin,
@@ -18,3 +22,5 @@ class VendorLoyaltiesViewSet(mixins.ListModelMixin,
                              GenericViewSet):
     queryset = VendorsLoyalties.objects.all()
     serializer_class = VendorsLoyaltiesSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = LoyaltiesFilter
