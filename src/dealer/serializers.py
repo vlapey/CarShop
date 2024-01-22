@@ -5,4 +5,4 @@ from .models import Dealer
 class DealerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dealer
-        fields = '__all__'
+        exclude = ('is_active', )

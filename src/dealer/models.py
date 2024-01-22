@@ -1,7 +1,7 @@
 from django.db import models
 from core.abstract_models import ModelProperties
 from django_countries.fields import CountryField
-from car.models import Car
+from src.cars.models import Cars
 
 
 class Dealer(ModelProperties):
@@ -13,9 +13,9 @@ class Dealer(ModelProperties):
         return self.name
 
 
-class DealerCar(ModelProperties):
+class DealersCar(ModelProperties):
     dealer = models.ForeignKey(Dealer, on_delete=models.CASCADE, related_name='dealer_dealer_car')
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='car_dealer_car')
+    car = models.ForeignKey(Cars, on_delete=models.CASCADE, related_name='car_dealer_car')
     amount = models.IntegerField(default=0)
     price = models.FloatField(default=.0)
 

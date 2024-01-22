@@ -34,3 +34,17 @@ class IsHavingLicense(Enum):
     @classmethod
     def choices(cls):
         return [(key.value, key.name) for key in cls]
+
+
+class Profile(Enum):
+    CUSTOMER = 'customer'
+    VENDOR = 'vendor'
+    DEALER = 'dealer'
+    ADMIN = 'admin'
+
+    @classmethod
+    def choices(cls):
+        return [(key.value, key.name) for key in cls]
+
+    def __str__(self):
+        return self.value
