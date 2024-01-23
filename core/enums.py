@@ -36,7 +36,7 @@ class IsHavingLicense(Enum):
         return [(key.value, key.name) for key in cls]
 
 
-class Profile(Enum):
+class Role(Enum):
     CUSTOMER = 'customer'
     VENDOR = 'vendor'
     DEALER = 'dealer'
