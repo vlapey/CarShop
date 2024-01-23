@@ -4,6 +4,7 @@ services:
   carshop:
     container_name: carshop
     build: .
+    command: python manage.py runserver 0.0.0.0:8000
     env_file:
       - .env
     ports:
@@ -14,8 +15,11 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT}
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
     depends_on:
       - db
+      - redis
   db:
     container_name: db
     image: postgres:12
@@ -27,6 +31,17 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  celery:
+    build: .
+    command: celery -A config worker -l INFO
+    depends_on:
+      - carshop
+      - redis
+
+  redis:
+    image: "redis:alpine"
+
 
 volumes:
   pgdata: {}
