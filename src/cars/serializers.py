@@ -13,4 +13,4 @@ class CarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cars
-        exclude = ('is_active', )
+        exclude = ('is_active', 'customer', 'dealer', 'vendor')
