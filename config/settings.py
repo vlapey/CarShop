@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'drf_yasg',
     'rest_framework_simplejwt',
-    "debug_toolbar",
+    'debug_toolbar',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -144,8 +145,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
