@@ -36,7 +36,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
     def _authenticate_credentials(self, request, token):
 
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY)
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms='HS256')
         except Exception:
             msg = 'Ошибка аутентификации. Невозможно декодировать токен'
             raise exceptions.AuthenticationFailed(msg)
@@ -51,4 +51,4 @@ class JWTAuthentication(authentication.BaseAuthentication):
             msg = 'Данный пользователь деактивирован.'
             raise exceptions.AuthenticationFailed(msg)
 
-        return (user, token)
+        return user, token
