@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'drf_yasg',
-    'rest_framework_simplejwt',
     'debug_toolbar',
     'django_extensions'
 ]
@@ -159,11 +158,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
 
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authentication.backends.JWTAuthentication',
     ),
 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'EXCEPTION_HANDLER': 'config.exceptions.core_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error',
 }
