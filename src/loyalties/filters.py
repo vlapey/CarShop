@@ -8,8 +8,8 @@ class LoyaltiesFilter(filters.FilterSet):
     min_discount = filters.NumberFilter(field_name='discount', lookup_expr='gte')
     max_discount = filters.NumberFilter(field_name='discount', lookup_expr='lte')
     is_active = filters.BooleanFilter(field_name='is_active')
-    date_created = filters.DateTimeFromToRangeFilter(field_name='date_created')
+    created_at = filters.DateTimeFromToRangeFilter(field_name='created_at')
 
     class Meta:
         model = Loyalties
-        fields = ['name', 'min_discount', 'max_discount', 'is_active', 'date_created']
+        fields = ['name', 'min_discount', 'max_discount', 'is_active', 'created_at']
