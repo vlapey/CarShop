@@ -40,7 +40,6 @@ class Role(Enum):
     CUSTOMER = 'customer'
     VENDOR = 'vendor'
     DEALER = 'dealer'
-    ADMIN = 'admin'
 
     @classmethod
     def choices(cls):
