@@ -1,10 +1,10 @@
-from django.contrib.auth.models import AbstractUser
 import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django.db import models
+from core.enums import Role
 
 
 class UserManager(BaseUserManager):
@@ -40,6 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    role = models.CharField(choices=Role.choices(), default='customer')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
