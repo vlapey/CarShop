@@ -22,6 +22,7 @@ class Cars(ModelProperties):
 
     color = models.CharField(max_length=10, choices=Color.choices(), default='black')
     mileage = models.PositiveIntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_car',
                                  null=True, default=None, blank=True)
     dealer = models.ForeignKey(Dealer, on_delete=models.CASCADE, related_name='dealer_car',
