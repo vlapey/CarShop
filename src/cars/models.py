@@ -1,6 +1,9 @@
 from django.db import models
 from core.abstract_models import ModelProperties
 from core.enums import Color, CarType
+from src.customer.models import Customer
+from src.dealer.models import Dealer
+from src.vendor.models import Vendor
 
 
 class CarSpecification(ModelProperties):
@@ -19,6 +22,9 @@ class Cars(ModelProperties):
 
     color = models.CharField(max_length=10, choices=Color.choices(), default='black')
     mileage = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return self.mileage
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_car',
+                                 null=True, default=None, blank=True)
+    dealer = models.ForeignKey(Dealer, on_delete=models.CASCADE, related_name='dealer_car',
+                               null=True, default=None, blank=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE, related_name='vendor_car',
+                               null=True, default=None, blank=True)
