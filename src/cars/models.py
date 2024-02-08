@@ -1,6 +1,6 @@
 from django.db import models
 from core.abstract_models import ModelProperties
-from core.enums import Color, CarType
+from core.enums import Color, CarType, CarEngineType
 from src.customer.models import Customer
 from src.dealer.models import Dealer
 from src.vendor.models import Vendor
@@ -9,7 +9,7 @@ from src.vendor.models import Vendor
 class CarSpecification(ModelProperties):
     brand = models.CharField(max_length=20, default='none')
     model = models.CharField(max_length=30, unique=True)
-    engine = models.CharField(max_length=60)
+    engine = models.CharField(max_length=10, choices=CarEngineType.choices(), default='diesel')
     horsepower = models.PositiveIntegerField(default=0)
     torque = models.PositiveIntegerField(default=0)
     car_type = models.CharField(max_length=20, choices=CarType.choices(), default='sedan')

@@ -58,8 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'drf_yasg',
-    'debug_toolbar',
-    'django_extensions'
+    'django_extensions',
     'debug_toolbar',
     'django_celery_beat',
 ]

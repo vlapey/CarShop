@@ -13,12 +13,4 @@ app.conf.beat_schedule = {
         "task": "src.cars.tasks.car_task",
         "schedule": crontab(minute="*/3"),
     },
-    "buy-dealer-vendor-every-one-minute": {
-        "task": "src.showroom.tasks.showroom_task",
-        "schedule": crontab(minute="*/1"),
-    },
-    "buy-customer-dealer-every-two-minutes": {
-        "task": "src.customer.tasks.customer_task",
-        "schedule": crontab(minute="*/2"),
-    },
 }
