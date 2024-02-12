@@ -15,7 +15,7 @@ class CarSpecification(ModelProperties):
     car_type = models.CharField(max_length=20, choices=CarType.choices(), default='sedan')
 
 
-class Cars(ModelProperties):
+class Car(ModelProperties):
 
     specification = models.ForeignKey(CarSpecification, on_delete=models.CASCADE,
                                       related_name='specification_car')

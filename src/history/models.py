@@ -4,11 +4,11 @@ from core.abstract_models import ModelProperties
 from src.dealer.models import Dealer
 from src.customer.models import Customer
 from src.vendor.models import Vendor
-from src.cars.models import Cars
+from src.car.models import Car
 
 
 class History(ModelProperties):
-    car = models.ForeignKey(Cars, on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
     price = models.PositiveIntegerField(default=0)
     discount = models.PositiveIntegerField(default=0, validators=[
         MaxValueValidator(100), MinValueValidator(0)])

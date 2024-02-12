@@ -9,8 +9,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    "add-cars-every-three-minutes": {
-        "task": "src.cars.tasks.car_task",
-        "schedule": crontab(minute="*/3"),
-    },
+    "add-car-every-three-minutes": {
+        "task": "src.vendor.tasks.vendor_task",
+        "schedule": 30
+    }
 }

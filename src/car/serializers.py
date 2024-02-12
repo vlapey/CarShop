@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CarSpecification, Cars
+from .models import CarSpecification, Car
 
 
 class CarSpecificationSerializer(serializers.ModelSerializer):
@@ -12,5 +12,5 @@ class CarSerializer(serializers.ModelSerializer):
     specification = CarSpecificationSerializer()
 
     class Meta:
-        model = Cars
+        model = Car
         exclude = ('is_active', 'customer', 'dealer', 'vendor')

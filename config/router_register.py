@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from src.cars.views import CarViewSet
+from src.car.views import CarViewSet
 from src.customer.views import CustomerViewSet
 from src.dealer.views import DealerViewSet
 from src.vendor.views import VendorViewSet
@@ -14,7 +14,7 @@ from src.orders.views import CustomerOrderViewSet, DealerOrderViewSet
 
 def router_register():
     router = routers.DefaultRouter()
-    router.register(r'cars', CarViewSet)
+    router.register(r'car', CarViewSet)
     router.register(r'customer', CustomerViewSet)
     router.register(r'dealer', DealerViewSet)
     router.register(r'history', CustomerDealerHistoryViewSet)
