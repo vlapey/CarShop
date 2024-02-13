@@ -20,6 +20,20 @@ services:
     ports:
       - "127.0.0.1:6379:6379"
 
+  flower:
+    container_name: flower
+    image: mher/flower
+    command: celery flower
+    ports:
+      - '5555:5555'
+    depends_on:
+      - celery
+
+  celery:
+    container_name: celery
+    build: .
+    command: celery -A config worker -l INFO
+
   carshop:
     container_name: carshop
     build: .
@@ -41,15 +55,6 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
-
-  celery:
-    container_name: celery
-    build: .
-    command: celery -A config worker -l INFO
-    depends_on:
-      - redis
-      - postgres
-      - carshop
 
 volumes:
   pgdata: {}
