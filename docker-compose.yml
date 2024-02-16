@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
 
-  postgres:
+  db:
     container_name: postgres
     image: postgres:12
     environment:
@@ -18,21 +18,24 @@ services:
     container_name: redis
     image: "redis:alpine"
     ports:
-      - "127.0.0.1:6379:6379"
+      - "6379:6379"
 
   flower:
-    container_name: flower
     image: mher/flower
-    command: celery flower
+    container_name: flower
     ports:
       - '5555:5555'
     depends_on:
       - celery
+      - redis
 
   celery:
     container_name: celery
     build: .
     command: celery -A config worker -l INFO
+    depends_on:
+      - db
+      - redis
 
   carshop:
     container_name: carshop
@@ -43,7 +46,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      - db
       - redis
     volumes:
       - .:/usr/src/app/
