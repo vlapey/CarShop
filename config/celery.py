@@ -11,6 +11,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "add-car-every-three-minutes": {
         "task": "src.vendor.tasks.vendor_task",
-        "schedule": 30
+        "schedule": crontab(minute='*/30')
     }
 }
