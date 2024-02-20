@@ -38,16 +38,6 @@ services:
       - db
       - redis
 
-  beat:
-    build: .
-    command: celery -A config beat -l INFO
-    volumes:
-      - pgdata:/usr/src/app/
-    env_file:
-      - .env
-    depends_on:
-      - celery
-
   carshop:
     container_name: carshop
     build: .
@@ -62,6 +52,7 @@ services:
     depends_on:
       - db
       - redis
+      - celery
     volumes:
       - .:/usr/src/app/
     environment:

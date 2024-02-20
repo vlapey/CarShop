@@ -1,5 +1,5 @@
 from src.car.models import Car, CarSpecification
-from .enums import CarType, CarModel, CarEngineType, CarBrand
+from .enums import CarType, CarModel, CarEngineType, CarBrand, Color
 import random
 
 
@@ -17,22 +17,24 @@ class CarRandomizer:
         return random.choice(tuple(CarBrand)).value
 
     @staticmethod
-    def get_random_color(cls):
-        return random.choice(tuple(cls)).value
+    def get_random_color():
+        return random.choice(tuple(Color)).value
 
     @staticmethod
     def randomize_car_specification():
         horsepower = random.randint(150, 500)
         torque = random.randint(100, 400)
-
+        brand = CarRandomizer.get_random_brand()
         car_specification = CarSpecification(
-            brand=CarRandomizer.get_random_brand(),
-            model=CarRandomizer.get_random_model(),
+            brand=brand,
+            model=CarRandomizer.get_random_model(brand),
             engine=CarRandomizer.get_random_engine_type(),
             horsepower=horsepower,
             torque=torque,
             car_type=CarRandomizer.get_random_type()
         )
+
+        car_specification.save()
 
         return car_specification
 
