@@ -24,10 +24,6 @@ def get_active_discount(cars):
         return 0
 
 
-def get_random_bool():
-    return bool(random.getrandbits(1))
-
-
 @shared_task
 def dealer_task():
     dealer = Dealer.objects.order_by('?').first()
