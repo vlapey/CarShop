@@ -9,8 +9,6 @@ from src.history.views import CustomerDealerHistoryViewSet, DealerVendorHistoryV
 
 from src.loyalties.views import DealersLoyaltiesViewSet, VendorLoyaltiesViewSet
 
-from src.orders.views import CustomerOrderViewSet, DealerOrderViewSet
-
 
 def router_register():
     router = routers.DefaultRouter()
@@ -21,8 +19,6 @@ def router_register():
     router.register(r'history', DealerVendorHistoryViewSet)
     router.register(r'loyalties', DealersLoyaltiesViewSet)
     router.register(r'loyalties', VendorLoyaltiesViewSet)
-    router.register(r'orders', CustomerOrderViewSet)
-    router.register(r'orders', DealerOrderViewSet)
     router.register(r'vendor', VendorViewSet)
 
     return router
