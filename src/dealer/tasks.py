@@ -11,6 +11,7 @@ from django.db.models import Q
 
 def get_active_discount(cars):
     today = date.today()
+    has_discount = 0
     try:
         for vendor_loyal in VendorsLoyalties.objects.all():
             has_discount = VendorsLoyalties.objects.filter(
