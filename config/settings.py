@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'src.customer',
     'src.dealer',
     'src.vendor',
-    'src.orders',
     'src.loyalties',
     'src.history',
     'authentication',
