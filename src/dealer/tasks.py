@@ -32,22 +32,11 @@ def get_random_bool():
 def dealer_task():
     dealer = Dealer.objects.order_by('?').first()
     wanted_car_specs = CarRandomizer.randomize_car()
+
     cars = Car.objects.filter(engine=wanted_car_specs.engine)
-
-    choice = get_random_bool()
-    if choice:
-        cars = cars.filter(horsepower__gte=wanted_car_specs.horsepower)
-    else:
-        cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
-
+    cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
     cars.filter(car_type=wanted_car_specs.car_type)
-
-    choice = get_random_bool()
-    if choice:
-        cars = cars.filter(mileage__gte=wanted_car_specs.mileage)
-    else:
-        cars = cars.filter(mileage__lte=wanted_car_specs.mileage)
-
+    cars = cars.filter(mileage__lte=wanted_car_specs.mileage)
     cars = cars.filter(price__lte=wanted_car_specs.price).order_by('price')
 
     discount = get_active_discount(cars)
