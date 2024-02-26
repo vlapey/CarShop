@@ -1,17 +1,16 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from core.abstract_models import ModelProperties
 from src.dealer.models import Dealer
 from src.customer.models import Customer
 from src.vendor.models import Vendor
+from src.loyalties.models import VendorsLoyalties
 from src.car.models import Car
 
 
 class History(ModelProperties):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    discount = models.ForeignKey(VendorsLoyalties, on_delete=models.CASCADE, related_name='vendors_discount')
     price = models.PositiveIntegerField(default=0)
-    discount = models.PositiveIntegerField(default=0, validators=[
-        MaxValueValidator(100), MinValueValidator(0)])
 
     class Meta:
         abstract = True

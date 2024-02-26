@@ -1,40 +1,61 @@
 from datetime import date
+from random import random
 
-from src.car.models import CarSpecification
+from src.car.models import CarSpecification, Car
+from core.car_randomizer import CarRandomizer
 from src.dealer.models import Dealer
 from celery import shared_task
 from src.loyalties.models import VendorsLoyalties
+from django.db.models import Exists, OuterRef
+from django.db.models import Q
+
+
+def get_active_discount(cars):
+    today = date.today()
+    try:
+        for vendor_loyal in VendorsLoyalties.objects.all():
+            has_discount = VendorsLoyalties.objects.filter(
+                car__in=cars,
+                vendor=vendor_loyal.vendor
+            )
+        vendor_loyal = has_discount.order_by('price').first()
+        return vendor_loyal.discount
+    except VendorsLoyalties.DoesNotExist:
+        return 0
+
+
+def get_random_bool():
+    return bool(random.getrandbits(1))
 
 
 @shared_task
 def dealer_task():
     dealer = Dealer.objects.order_by('?').first()
-    # wanted_specification = CarSpecification(
-    #     brand=CarRandomizer.get_random_brand(),
-    #     model=CarRandomizer.get_random_model(),
-    #     engine=CarRandomizer.get_random_engine_type(),
-    #     horsepower=horsepower,
-    #     torque=torque,
-    #     car_type=CarRandomizer.get_random_type()
-    # )
-    # discount = get_active_discount(car, dealer)
-    # DealerVendorHistory.objects.create(
-    #     car=car,
-    #     price=car.price,
-    #     discount=discount,
-    #     dealer=dealer,
-    #     vendor=
-    # )
-    pass
+    wanted_car_specs = CarRandomizer.randomize_car()
+    cars = Car.objects.filter(engine=wanted_car_specs.engine)
 
+    choice = get_random_bool()
+    if choice:
+        cars = cars.filter(horsepower__gte=wanted_car_specs.horsepower)
+    else:
+        cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
 
-def get_active_discount(car, vendor):
-    today = date.today()
-    try:
-        discount = VendorsLoyalties.objects.filter(start_date__lte=today, end_date__gte=today,
-                                                   car=car, vendor=vendor).first()
-        return discount
-    except VendorsLoyalties.DoesNotExist:
-        return 0
+    cars.filter(car_type=wanted_car_specs.car_type)
 
+    choice = get_random_bool()
+    if choice:
+        cars = cars.filter(mileage__gte=wanted_car_specs.mileage)
+    else:
+        cars = cars.filter(mileage__lte=wanted_car_specs.mileage)
 
+    cars = cars.filter(price__lte=wanted_car_specs.price).order_by('price')
+
+    discount = get_active_discount(cars)
+    if discount:
+        for car in cars:
+            car.price = car.price - cars.price * (discount / 100)
+
+    car = car.order_by('price').first()
+    car.vendor = None
+    car.dealer = dealer
+    car.save()
