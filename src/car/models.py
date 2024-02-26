@@ -6,19 +6,13 @@ from src.dealer.models import Dealer
 from src.vendor.models import Vendor
 
 
-class CarSpecification(ModelProperties):
+class Car(ModelProperties):
     brand = models.CharField(max_length=20, default='none')
     model = models.CharField(max_length=30)
     engine = models.CharField(max_length=10, choices=CarEngineType.choices(), default='diesel')
     horsepower = models.PositiveIntegerField(default=0)
     torque = models.PositiveIntegerField(default=0)
     car_type = models.CharField(max_length=20, choices=CarType.choices(), default='sedan')
-
-
-class Car(ModelProperties):
-
-    specification = models.ForeignKey(CarSpecification, on_delete=models.CASCADE,
-                                      related_name='specification_car')
 
     color = models.CharField(max_length=10, choices=Color.choices(), default='black')
     mileage = models.PositiveIntegerField(default=0)

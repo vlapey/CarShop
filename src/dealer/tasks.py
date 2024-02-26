@@ -1,7 +1,6 @@
 from datetime import date
-from random import random
 
-from src.car.models import CarSpecification, Car
+from src.car.models import Car
 from core.car_randomizer import CarRandomizer
 from src.dealer.models import Dealer
 from celery import shared_task
