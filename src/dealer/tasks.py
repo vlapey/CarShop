@@ -35,12 +35,16 @@ def dealer_task():
     cars = cars.filter(mileage__lte=wanted_car_specs.mileage)
     cars = cars.filter(price__lte=wanted_car_specs.price).order_by('price')
 
-    discount = get_active_discount(cars)
-    if discount:
-        for car in cars:
-            car.price = car.price - cars.price * (discount / 100)
+    # discount = get_active_discount(cars)
+    # if discount:
+    #     for car in cars:
+    #         car.price = car.price - cars.price * (discount / 100)
 
-    car = car.order_by('price').first()
-    car.vendor = None
-    car.dealer = dealer
-    car.save()
+    car = cars.order_by('price').first()
+
+    if car is not None:
+        car.vendor = None  # Set vendor field to NULL
+        car.dealer = dealer
+        car.save()
+    else:
+        print("There's no such car")
