@@ -1,50 +1,56 @@
-from datetime import date
+from django.utils import timezone
 
 from src.car.models import Car
-from core.car_randomizer import CarRandomizer
+from core.car_randomizer import SpecsRandomizer
 from src.dealer.models import Dealer
 from celery import shared_task
 from src.loyalties.models import VendorsLoyalties
-from django.db.models import Exists, OuterRef
-from django.db.models import Q
 
 
 def get_active_discount(cars):
-    today = date.today()
-    has_discount = 0
-    try:
-        for vendor_loyal in VendorsLoyalties.objects.all():
-            has_discount = VendorsLoyalties.objects.filter(
-                car__in=cars,
-                vendor=vendor_loyal.vendor
-            )
-        vendor_loyal = has_discount.order_by('price').first()
-        return vendor_loyal.discount
-    except VendorsLoyalties.DoesNotExist:
+    today = timezone.now()
+    has_discount = VendorsLoyalties.objects.filter(
+        car__in=cars,
+        vendor__in=[car.vendor for car in cars],
+        end_date__gte=today
+    )
+    if not has_discount:
         return 0
+
+    vendor_loyal = has_discount.order_by('-discount').first()
+    return vendor_loyal.discount
 
 
 @shared_task
 def dealer_task():
     dealer = Dealer.objects.order_by('?').first()
-    wanted_car_specs = CarRandomizer.randomize_car()
+    wanted_car_specs = SpecsRandomizer.randomize_specs()
 
     cars = Car.objects.filter(engine=wanted_car_specs.engine)
-    cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
-    cars.filter(car_type=wanted_car_specs.car_type)
-    cars = cars.filter(mileage__lte=wanted_car_specs.mileage)
-    cars = cars.filter(price__lte=wanted_car_specs.price).order_by('price')
+    cars = cars.filter(horsepower=wanted_car_specs.horsepower)
+    cars = cars.filter(car_type=wanted_car_specs.car_type)
+    cars = cars.filter(mileage=wanted_car_specs.mileage)
+    cars = cars.filter(price=wanted_car_specs.price).order_by('price')
 
-    # discount = get_active_discount(cars)
-    # if discount:
-    #     for car in cars:
-    #         car.price = car.price - cars.price * (discount / 100)
+    discount = get_active_discount(cars)
+    cheapest_car = None
 
-    car = cars.order_by('price').first()
+    if discount:
+        discounted_prices = []
+        for car in cars:
+            discounted_price = car.price - car.price * (discount / 100)
+            discounted_prices.append(discounted_price)
+        cheapest_index = discounted_prices.index(min(discounted_prices))
+        cheapest_car = cars[cheapest_index]
 
-    if car is not None:
-        car.vendor = None  # Set vendor field to NULL
-        car.dealer = dealer
-        car.save()
+    if cheapest_car:
+        if dealer.balance >= cheapest_car.price:
+            cheapest_car.vendor = None  # Set vendor field to NULL
+            cheapest_car.dealer = dealer
+            dealer.balance = dealer.balance - cheapest_car.price
+            dealer.save()
+            cheapest_car.save()
+        else:
+            print("dealer has insufficient balance")
     else:
         print("There's no such car")

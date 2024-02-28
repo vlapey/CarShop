@@ -83,3 +83,38 @@ class CarRandomizer:
             return None
 
         return random.choice(models)
+
+
+class SpecsRandomizer:
+    @staticmethod
+    def get_random_engine_type():
+        return CarRandomizer.get_random_engine_type()
+
+    @staticmethod
+    def get_random_horsepower():
+        min_horsepower = Car.objects.order_by('horsepower').values().first()['horsepower']
+        max_horsepower = Car.objects.order_by('-horsepower').values().first()['horsepower']
+        return random.randint(min_horsepower, max_horsepower)
+
+    @staticmethod
+    def get_random_mileage():
+        min_mileage = Car.objects.order_by('mileage').values().first()['mileage']
+        max_mileage = Car.objects.order_by('-mileage').values().first()['mileage']
+        return random.randint(min_mileage, max_mileage)
+
+    @staticmethod
+    def get_random_price():
+        min_price = Car.objects.order_by('price').values().first()['price']
+        max_price = Car.objects.order_by('-price').values().first()['price']
+        return random.randint(min_price, max_price)
+
+    @staticmethod
+    def randomize_specs():
+        car = Car(
+            engine=CarRandomizer.get_random_engine_type(),
+            horsepower=SpecsRandomizer.get_random_horsepower(),
+            car_type=CarRandomizer.get_random_type(),
+            mileage=SpecsRandomizer.get_random_mileage(),
+            price=SpecsRandomizer.get_random_price()
+        )
+        return car
