@@ -21,36 +21,71 @@ def get_active_discount(cars):
     return vendor_loyal.discount
 
 
+def get_cars_by_filters(wanted_car_specs, wanted_car_types):
+
+    cars = Car.objects.filter(engine=wanted_car_specs.engine)
+
+    after_filter_cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
+    if not after_filter_cars:
+        cars = cars.filter(horsepower__gte=wanted_car_specs.horsepower)
+    else:
+        cars = after_filter_cars
+    del after_filter_cars
+
+    counter = 0
+    while not cars or counter < 2:
+        cars = cars.filter(car_type__in=wanted_car_types)
+        counter += 1
+
+    after_filter_cars = cars.filter(mileage__lte=wanted_car_specs.mileage)
+    if not after_filter_cars:
+        cars = cars.filter(mileage__gte=wanted_car_specs.mileage)
+    else:
+        cars = after_filter_cars
+    del after_filter_cars
+
+    after_filter_cars = cars.filter(price__lte=wanted_car_specs.price).order_by('price')
+    if not after_filter_cars:
+        cars = cars.filter(price__gte=wanted_car_specs.price).order_by('price')
+    else:
+        cars = after_filter_cars
+    del after_filter_cars
+
+    return cars
+
+
+def find_cheapest_car_with_discount(discount, cars):
+    discounted_prices = []
+    for car in cars:
+        discounted_price = car.price - car.price * (discount / 100)
+        discounted_prices.append(discounted_price)
+    cheapest_index = discounted_prices.index(min(discounted_prices))
+    cheapest_car = cars[cheapest_index]
+    return cheapest_car
+
+
+def dealer_buys_car(car, dealer):
+    if dealer.balance >= car.price:
+        car.vendor = None  # Set vendor field to NULL
+        car.dealer = dealer
+        dealer.balance = dealer.balance - car.price
+        dealer.save()
+        car.save()
+    else:
+        print("dealer has insufficient balance")
+
+
 @shared_task
 def dealer_task():
     dealer = Dealer.objects.order_by('?').first()
     wanted_car_specs = SpecsRandomizer.randomize_specs()
-
-    cars = Car.objects.filter(engine=wanted_car_specs.engine)
-    cars = cars.filter(horsepower=wanted_car_specs.horsepower)
-    cars = cars.filter(car_type=wanted_car_specs.car_type)
-    cars = cars.filter(mileage=wanted_car_specs.mileage)
-    cars = cars.filter(price=wanted_car_specs.price).order_by('price')
+    wanted_car_types = SpecsRandomizer.get_random_type()
+    cars = get_cars_by_filters(wanted_car_specs, wanted_car_types)
+    if not cars:
+        print("No cars found with such filters")
+        return
 
     discount = get_active_discount(cars)
-    cheapest_car = None
+    car = find_cheapest_car_with_discount(discount, cars)
 
-    if discount:
-        discounted_prices = []
-        for car in cars:
-            discounted_price = car.price - car.price * (discount / 100)
-            discounted_prices.append(discounted_price)
-        cheapest_index = discounted_prices.index(min(discounted_prices))
-        cheapest_car = cars[cheapest_index]
-
-    if cheapest_car:
-        if dealer.balance >= cheapest_car.price:
-            cheapest_car.vendor = None  # Set vendor field to NULL
-            cheapest_car.dealer = dealer
-            dealer.balance = dealer.balance - cheapest_car.price
-            dealer.save()
-            cheapest_car.save()
-        else:
-            print("dealer has insufficient balance")
-    else:
-        print("There's no such car")
+    dealer_buys_car(car, dealer)

@@ -87,6 +87,14 @@ class CarRandomizer:
 
 class SpecsRandomizer:
     @staticmethod
+    def get_random_type():
+        car_type_list = []
+        while len(car_type_list) < 3:
+            car_type_list.append(CarRandomizer.get_random_type())
+            car_type_list = list(dict.fromkeys(car_type_list))
+        return car_type_list
+
+    @staticmethod
     def get_random_engine_type():
         return CarRandomizer.get_random_engine_type()
 
