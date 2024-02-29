@@ -5,6 +5,7 @@ from core.car_randomizer import SpecsRandomizer
 from src.dealer.models import Dealer
 from celery import shared_task
 from src.loyalties.models import VendorsLoyalties
+from src.history.models import DealerVendorHistory
 
 
 def get_active_discount(cars):
@@ -22,8 +23,11 @@ def get_active_discount(cars):
 
 
 def get_cars_by_filters(wanted_car_specs, wanted_car_types):
+    cars = Car.objects.filter(vendor__isnull=False)
+    if not cars:
+        return cars
 
-    cars = Car.objects.filter(engine=wanted_car_specs.engine)
+    cars = cars.filter(engine=wanted_car_specs.engine)
 
     after_filter_cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
     if not after_filter_cars:
@@ -64,20 +68,36 @@ def find_cheapest_car_with_discount(discount, cars):
     return cheapest_car
 
 
-def dealer_buys_car(car, dealer):
-    if dealer.balance >= car.price:
-        car.vendor = None  # Set vendor field to NULL
-        car.dealer = dealer
-        dealer.balance = dealer.balance - car.price
-        dealer.save()
-        car.save()
-    else:
+def dealer_buys_car(car, dealer, discount):
+    if dealer.balance <= car.price:
         print("dealer has insufficient balance")
+        return
+
+    record = DealerVendorHistory(
+        price=car.price,
+        dealer=dealer,
+        vendor=car.vendor,
+        car=car,
+        discount=discount
+    )
+
+    car.vendor = None
+    car.dealer = dealer
+    dealer.balance = dealer.balance - car.price
+    dealer.save()
+    car.save()
+
+    record.save()
 
 
 @shared_task
 def dealer_task():
     dealer = Dealer.objects.order_by('?').first()
+
+    if not dealer:
+        print("There are no dealers")
+        return
+
     wanted_car_specs = SpecsRandomizer.randomize_specs()
     wanted_car_types = SpecsRandomizer.get_random_type()
     cars = get_cars_by_filters(wanted_car_specs, wanted_car_types)
@@ -88,4 +108,4 @@ def dealer_task():
     discount = get_active_discount(cars)
     car = find_cheapest_car_with_discount(discount, cars)
 
-    dealer_buys_car(car, dealer)
+    dealer_buys_car(car, dealer, discount)
