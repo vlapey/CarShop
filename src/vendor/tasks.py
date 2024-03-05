@@ -1,4 +1,4 @@
-from core.car_randomizer import CarRandomizer
+from core.car_service import CarRandomizer
 from src.vendor.models import Vendor
 from celery import shared_task
 
