@@ -1,9 +1,6 @@
-from django.utils import timezone
-
-from core.car_service import SpecsRandomizer, CarFinder
+from core.car_service import CarFinder
 from .models import Customer
 from celery import shared_task
-from src.loyalties.models import DealersLoyalties
 from src.history.models import CustomerDealerHistory
 
 
