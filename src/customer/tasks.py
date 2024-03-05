@@ -15,6 +15,11 @@ def customer_task():
         return
 
     data = CarFinder.find_cheapest_car_and_discount(customer)
+
+    if not data:
+        print("Didn't get Data from CarFinder")
+        return
+
     car = data[0]
     discount = data[1]
     del data

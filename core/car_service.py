@@ -65,6 +65,10 @@ class CarFinder:
             return
 
         discount = CarFinder.get_active_discount(cars, selector)
+
+        if not discount:
+            return
+
         discounted_prices = []
         for car in cars:
             discounted_price = car.price - car.price * (discount / 100)
