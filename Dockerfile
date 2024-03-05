@@ -1,6 +1,8 @@
 # Use the official Python base image
 FROM python:3.11.6
 
+RUN mkdir -p /usr/src/app/static/
+
 # Set the working directory
 WORKDIR /app
 
