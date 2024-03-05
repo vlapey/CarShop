@@ -8,12 +8,19 @@ from django.utils import timezone
 
 class CarFinder:
     @staticmethod
-    def get_cars_by_filters(wanted_car_specs, wanted_car_types):
-        cars = Car.objects.filter(vendor__isnull=False)
-        if not cars:
+    def get_cars_by_filters(wanted_car_specs, wanted_car_types, selector):
+        if selector:
+            cars = Car.objects.filter(dealer__isnull=False)
+        else:
+            cars = Car.objects.filter(vendor__isnull=False)
+
+        if len(cars) < 1:
             return cars
 
         cars = cars.filter(engine=wanted_car_specs.engine)
+
+        if len(cars) < 1:
+            return cars
 
         after_filter_cars = cars.filter(horsepower__lte=wanted_car_specs.horsepower)
         if not after_filter_cars:
@@ -23,7 +30,8 @@ class CarFinder:
         del after_filter_cars
 
         counter = 0
-        while not cars or counter < 2:
+
+        while len(cars) < 1 or counter < 2:
             cars = cars.filter(car_type__in=wanted_car_types)
             counter += 1
 
@@ -51,8 +59,8 @@ class CarFinder:
 
         wanted_car_specs = SpecsRandomizer.randomize_specs()
         wanted_car_types = SpecsRandomizer.get_random_type()
-        cars = CarFinder.get_cars_by_filters(wanted_car_specs, wanted_car_types)
-        if not cars:
+        cars = CarFinder.get_cars_by_filters(wanted_car_specs, wanted_car_types, selector)
+        if len(cars) < 1:
             print("No cars found with such filters")
             return
 

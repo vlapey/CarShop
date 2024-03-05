@@ -27,6 +27,10 @@ def customer_buys_car(car, customer, discount):
         print("customer has insufficient balance")
         return
 
+    if not car.dealer:
+        print("Car has no dealer")
+        return
+
     record = CustomerDealerHistory(
         price=car.price,
         customer=customer,
