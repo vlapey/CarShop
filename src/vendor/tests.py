@@ -8,5 +8,6 @@ from src.car.models import Car
 def test_vendor_task():
     car_objects_counter = Car.objects.count()
     vendor_task()
+    car_objects_counter += 1
     assert car_objects_counter == Car.objects.count()
 
