@@ -1,3 +1,12 @@
-from django.test import TestCase
+import pytest
 
-# Create your tests here.
+from .tasks import vendor_task
+from src.car.models import Car
+
+
+@pytest.mark.django_db
+def vendor_task_test():
+    car_objects_counter = Car.objects.count()
+    vendor_task()
+    assert car_objects_counter == Car.objects.count()
+
