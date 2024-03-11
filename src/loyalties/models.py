@@ -1,6 +1,6 @@
 from django.db import models
 from core.abstract_models import ModelProperties
-from src.cars.models import Cars
+from src.car.models import Car
 from src.dealer.models import Dealer
 from src.vendor.models import Vendor
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -19,7 +19,7 @@ class Loyalties(ModelProperties):
 
 
 class DealersLoyalties(Loyalties):
-    car = models.ForeignKey(Cars, on_delete=models.CASCADE, related_name='car_promotion')
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='car_promotion')
     dealer = models.ForeignKey(Dealer, on_delete=models.CASCADE,
                                related_name='dealer_loyalties')
 
@@ -28,7 +28,7 @@ class DealersLoyalties(Loyalties):
 
 
 class VendorsLoyalties(Loyalties):
-    car = models.ForeignKey(Cars, on_delete=models.CASCADE, related_name='car_loyalties')
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='car_loyalties')
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE,
                                related_name='vendor_loyalties')
 
