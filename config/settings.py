@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # local apps
-    'src.car',
     'src.customer',
+    'src.car',
     'src.dealer',
     'src.vendor',
     'src.loyalties',
