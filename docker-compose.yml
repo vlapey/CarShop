@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+
+  db:
+    container_name: postgres
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  flower:
+    build: .
+    container_name: flower
+    command: "celery -A config flower --address=0.0.0.0"
+    ports:
+      - '5555:5555'
+    depends_on:
+      - celery
+      - redis
+
+  celery:
+    container_name: celery
+    build: .
+    command: celery -A config worker -l INFO
+    depends_on:
+      - db
+      - redis
+
+  carshop:
+    container_name: carshop
+    build: .
+    command: sh -c "
+      python manage.py makemigrations && 
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000 "
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+      - celery
+    volumes:
+      - .:/usr/src/app/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - CELERY_BROKER=${CELERY_BROKER_URL}
+      - CELERY_BACKEND=${CELERY_BROKER_URL}
+
+volumes:
+  pgdata:
